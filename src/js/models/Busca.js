@@ -12,8 +12,7 @@ export default class Busca {
         try {
             const resultado = await axios(`${proxy}https://www.food2fork.com/api/search?key=${chave}&q=${this.query}`);
             this.resultado = resultado.data.recipes;
-
-            // console.log(this.resultado);
+            
         } catch (error) {
             alert(error);
         }

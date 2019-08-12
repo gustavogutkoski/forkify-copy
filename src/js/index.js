@@ -1,4 +1,6 @@
 import Busca from './models/Busca';
+import * as buscaView from './views/buscaView';
+import { camposDOM } from './views/base';
 
 /* States globais do app
  * - Busca obj
@@ -11,24 +13,27 @@ const state = {};
 
 const controllerBusca = async () => {
     // pega query da view
-    const query = 'pizza'; // implementar depois
+    const query = buscaView.getInput();
 
     if (query) {
         // cria novo obj busca e adiciona no state
         state.busca = new Busca(query);
 
         // prepara UI para os resultados
-
+        buscaView.limpaInput();
+        buscaView.limpaResultados();
+        
         // procura por receitas
         await state.busca.getResultadoBusca();
 
         // monta resultados na UI
-        console.log(state.busca.resultado);
+        buscaView.carregaResultadosBusca(state.busca.resultado);
+        buscaView.limpaInput();
 
     }    
 }
 
-document.querySelector('.search').addEventListener('submit', evento => {
+camposDOM.buscaForm.addEventListener('submit', evento => {
     evento.preventDefault();
     controllerBusca();
 });
