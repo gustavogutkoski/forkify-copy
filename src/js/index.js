@@ -1,6 +1,6 @@
 import Busca from './models/Busca';
 import * as buscaView from './views/buscaView';
-import { camposDOM } from './views/base';
+import { camposDOM, criaLoader, limpaLoader } from './views/base';
 
 /* States globais do app
  * - Busca obj
@@ -22,6 +22,7 @@ const controllerBusca = async () => {
         // prepara UI para os resultados
         buscaView.limpaInput();
         buscaView.limpaResultados();
+        criaLoader(camposDOM.buscaResultados);
         
         // procura por receitas
         await state.busca.getResultadoBusca();
@@ -29,6 +30,7 @@ const controllerBusca = async () => {
         // monta resultados na UI
         buscaView.carregaResultadosBusca(state.busca.resultado);
         buscaView.limpaInput();
+        limpaLoader();
 
     }    
 }
