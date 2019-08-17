@@ -8,6 +8,7 @@ export const limpaInput = () => {
 
 export const limpaResultados = () => {
     camposDOM.buscaListaResultados.innerHTML = '';
+    camposDOM.buscaPaginasResultados.innerHTML = '';
 };
 
 /* Return the title of the recipe + '...' when the title is too long
@@ -55,6 +56,41 @@ const carregaReceita = receita => {
     camposDOM.buscaListaResultados.insertAdjacentHTML('beforeend', insereItemHTML);
 };
 
-export const carregaResultadosBusca = receitas => {
-    receitas.forEach(carregaReceita);
-}
+/* Cria botão para paginação dos resultados a esquerda da pagina
+ *  tipoBotao => 'prev' = pagina anterior / 'next' = próxima página
+ */
+const criaBotaoPaginacao = (paginaAtual, tipoBotao) => `
+    <button class="btn-inline results__btn--${tipoBotao}" data-goto=${tipoBotao === 'prev' ? paginaAtual - 1 : paginaAtual + 1}>
+        <span>Page ${tipoBotao === 'prev' ? paginaAtual - 1 : paginaAtual + 1}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${tipoBotao === 'prev' ? 'left' : 'right'}"></use>
+        </svg>        
+    </button>
+`;
+
+const carregaBotoes = (paginaAtual, totalResultados, resultadosPorPagina) => {
+    const totalPaginas = Math.ceil(totalResultados / resultadosPorPagina);
+
+    let botaoPaginacao;
+    if (paginaAtual === 1 && totalPaginas > 1) {
+        botaoPaginacao = criaBotaoPaginacao(paginaAtual, 'next');
+    } else if (paginaAtual < totalPaginas) {
+        botaoPaginacao = `
+            ${criaBotaoPaginacao(paginaAtual, 'prev')}
+            ${criaBotaoPaginacao(paginaAtual, 'next')}
+        `;
+    } else if (paginaAtual === totalPaginas && totalPaginas > 1) {
+        botaoPaginacao = criaBotaoPaginacao(paginaAtual, 'prev');
+    };
+
+    camposDOM.buscaPaginasResultados.insertAdjacentHTML('afterbegin', botaoPaginacao);
+};
+
+export const carregaResultadosBusca = (receitas, pagina = 1, resultadosPorPagina = 10) => {
+    const inicio = (pagina - 1) * resultadosPorPagina;
+    const final = pagina * resultadosPorPagina;
+
+    receitas.slice(inicio, final).forEach(carregaReceita);
+
+    carregaBotoes(pagina, receitas.length, resultadosPorPagina);
+};

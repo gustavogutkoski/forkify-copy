@@ -39,3 +39,12 @@ camposDOM.buscaForm.addEventListener('submit', evento => {
     evento.preventDefault();
     controllerBusca();
 });
+
+camposDOM.buscaPaginasResultados.addEventListener('click', evento => {
+    const btn = evento.target.closest('.btn-inline');
+    if (btn) {        
+        const pagina = parseInt(btn.dataset.goto, 10);
+        buscaView.limpaResultados();
+        buscaView.carregaResultadosBusca(state.busca.resultado, pagina);
+    }    
+});
