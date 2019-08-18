@@ -42,7 +42,7 @@ const corrigeTitulosDasReceitas = (titulo, limiteMaxCaracter = 17) => {
 const carregaReceita = receita => {
     const insereItemHTML = `
     <li>
-        <a class="results__link" href="${receita.recipe_id}">
+        <a class="results__link" href="#${receita.recipe_id}">
             <figure class="results__fig">
                 <img src="${receita.image_url}" alt="${receita.title}">
             </figure>
@@ -56,8 +56,8 @@ const carregaReceita = receita => {
     camposDOM.buscaListaResultados.insertAdjacentHTML('beforeend', insereItemHTML);
 };
 
-/* Cria botão para paginação dos resultados a esquerda da pagina
- *  tipoBotao => 'prev' = pagina anterior / 'next' = próxima página
+/* Create button for navigate through the search results
+ *  tipoBotao => 'prev' = previous page / 'next' = next page
  */
 const criaBotaoPaginacao = (paginaAtual, tipoBotao) => `
     <button class="btn-inline results__btn--${tipoBotao}" data-goto=${tipoBotao === 'prev' ? paginaAtual - 1 : paginaAtual + 1}>

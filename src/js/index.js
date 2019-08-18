@@ -1,4 +1,5 @@
 import Busca from './models/Busca';
+import Receita from './models/Receita';
 import * as buscaView from './views/buscaView';
 import { camposDOM, criaLoader, limpaLoader } from './views/base';
 
@@ -24,13 +25,17 @@ const controllerBusca = async () => {
         buscaView.limpaResultados();
         criaLoader(camposDOM.buscaResultados);
         
-        // procura por receitas
-        await state.busca.getResultadoBusca();
-
-        // monta resultados na UI
-        buscaView.carregaResultadosBusca(state.busca.resultado);
-        buscaView.limpaInput();
-        limpaLoader();
+        try {
+            // procura por receitas
+            await state.busca.getResultadoBusca();
+    
+            // monta resultados na UI
+            limpaLoader();
+            buscaView.carregaResultadosBusca(state.busca.resultado);            
+        } catch (error) {
+            alert('Something went wrong with the search!');
+            limpaLoader();
+        }
 
     }    
 }
@@ -48,3 +53,32 @@ camposDOM.buscaPaginasResultados.addEventListener('click', evento => {
         buscaView.carregaResultadosBusca(state.busca.resultado, pagina);
     }    
 });
+
+const controllerReceita = async () => {
+    // pega ID da URL
+    const id = window.location.hash.replace('#', '');
+    console.log(id);
+
+    if (id) {
+        // prepara UI
+
+        // cria novo obj Receita
+        state.receita = new Receita(id);
+
+        try {
+            // recebe infos da receita
+            await state.receita.getReceita();
+    
+            // calcula porções e tempo
+            state.receita.calculaTempoPreparo();
+            state.receita.calculaPorcoesServidas();
+    
+            // carrega receita pra UI
+            console.log(state.receita);
+        } catch (error) {
+            alert('Error processing recipe!');
+        }
+    }
+};
+
+['hashchange', 'load'].forEach(evento => window.addEventListener(evento, controllerReceita));
