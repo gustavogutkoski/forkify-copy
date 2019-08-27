@@ -66,8 +66,9 @@ const controllerReceita = async () => {
         state.receita = new Receita(id);
 
         try {
-            // recebe infos da receita
+            // recebe infos da receita e carrega os ingredientes
             await state.receita.getReceita();
+            state.receita.processaInfosIngredientes();
     
             // calcula porções e tempo
             state.receita.calculaTempoPreparo();

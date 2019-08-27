@@ -45,11 +45,45 @@ export default class Receita {
             });
 
             // remove parenteses das strings
-            ingrediente = ingrediente.replace(/ *\([^)]*\) */g, '');
+            ingrediente = ingrediente.replace(/ *\([^)]*\) */g, ' ');
 
+            // verifica os ingredientes em quantidade, unidade e ingrediente
+            const arrayIngrediente = ingrediente.split(' ');
+            const indexUnidade = arrayIngrediente.findIndex(item2 => unidadesTextoCurto.includes(item2));
 
+            let objIngrediente;
+            if (indexUnidade < -1) {
+                const arrayQuantidade = arrayIngrediente.slice(0, indexUnidade);
 
-            return ingrediente;
+                let quantidade;
+                if (arrayQuantidade === 1) {
+                    quantidade = eval(arrayIngrediente[0].replace('-', '+'));
+                } else {
+                    quantidade = eval(arrayIngrediente.slice(0, indexUnidade).join('+'));
+                }
+
+                objIngrediente = {
+                    codigo: quantidade,
+                    unidade: arrayIngrediente[indexUnidade],
+                    ingrediente: arrayIngrediente.slice(indexUnidade + 1).join(' ')
+                }
+
+            } else if (parseInt(arrayIngrediente[0], 10)) {
+                objIngrediente = {
+                    codigo: parseInt(arrayIngrediente[0], 10),
+                    unidade: '',
+                    ingrediente: arrayIngrediente.slice(1).join(' ')
+                }
+
+            } else if (indexUnidade === -1) {
+                objIngrediente = {
+                    codigo: 1,
+                    unidade: '',
+                    ingrediente
+                }
+            }
+
+            return objIngrediente;
         });
     }
 };
