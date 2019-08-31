@@ -1,4 +1,4 @@
-import { camposDOM, criaLoader } from './base';
+import { camposDOM } from './base';
 
 export const getInput = () => camposDOM.buscaInput.value;
 
@@ -9,6 +9,15 @@ export const limpaInput = () => {
 export const limpaResultados = () => {
     camposDOM.buscaListaResultados.innerHTML = '';
     camposDOM.buscaPaginasResultados.innerHTML = '';
+};
+
+export const marcaItemSelecionado = id => {
+    const resultadoArray = Array.from(document.querySelectorAll('.result__link'));
+    resultadoArray.forEach(item => {
+        item.classList.remove('result__link--active');
+    });
+
+    document.querySelector(`a[href="#${id}"]`).classList.add('result__link--active');
 };
 
 /* Return the title of the recipe + '...' when the title is too long

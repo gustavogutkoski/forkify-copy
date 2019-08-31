@@ -3,7 +3,8 @@ export const camposDOM = {
     buscaInput: document.querySelector('.search__field'),
     buscaResultados: document.querySelector('.results'),
     buscaListaResultados: document.querySelector('.results__list'),
-    buscaPaginasResultados: document.querySelector('.results__pages')
+    buscaPaginasResultados: document.querySelector('.results__pages'),
+    receita: document.querySelector('.recipe')
 };
 
 export const camposDOMString = {

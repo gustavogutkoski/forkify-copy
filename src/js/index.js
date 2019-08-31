@@ -1,6 +1,7 @@
 import Busca from './models/Busca';
 import Receita from './models/Receita';
 import * as buscaView from './views/buscaView';
+import * as receitaView from './views/receitaView';
 import { camposDOM, criaLoader, limpaLoader } from './views/base';
 
 /* States globais do app
@@ -57,11 +58,16 @@ camposDOM.buscaPaginasResultados.addEventListener('click', evento => {
 const controllerReceita = async () => {
     // pega ID da URL
     const id = window.location.hash.replace('#', '');
-    console.log(id);
 
     if (id) {
         // prepara UI
+        receitaView.limpaReceita();
+        criaLoader(camposDOM.receita);
 
+        // marca item selecionado na lista das receitas
+        if (state.busca) {
+            buscaView.marcaItemSelecionado(id);    
+        }
         // cria novo obj Receita
         state.receita = new Receita(id);
 
@@ -75,7 +81,8 @@ const controllerReceita = async () => {
             state.receita.calculaPorcoesServidas();
     
             // carrega receita pra UI
-            console.log(state.receita);
+            limpaLoader();
+            receitaView.renderizaReceita(state.receita);
         } catch (error) {
             alert('Error processing recipe!');
         }

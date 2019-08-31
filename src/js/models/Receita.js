@@ -35,6 +35,7 @@ export default class Receita {
         // ajusta strings das unidades para todas ficarem iguais
         const unidadesTextoLongo = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds'];
         const unidadesTextoCurto = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
+        const unidades = [...unidadesTextoCurto, 'kg', 'g'];
 
         const novosIngredientes = this.ingredientes.map(item => {
             
@@ -49,7 +50,7 @@ export default class Receita {
 
             // verifica os ingredientes em quantidade, unidade e ingrediente
             const arrayIngrediente = ingrediente.split(' ');
-            const indexUnidade = arrayIngrediente.findIndex(item2 => unidadesTextoCurto.includes(item2));
+            const indexUnidade = arrayIngrediente.findIndex(item2 => unidades.includes(item2));
 
             let objIngrediente;
             if (indexUnidade < -1) {
@@ -63,21 +64,21 @@ export default class Receita {
                 }
 
                 objIngrediente = {
-                    codigo: quantidade,
+                    quantidade,
                     unidade: arrayIngrediente[indexUnidade],
                     ingrediente: arrayIngrediente.slice(indexUnidade + 1).join(' ')
                 }
 
             } else if (parseInt(arrayIngrediente[0], 10)) {
                 objIngrediente = {
-                    codigo: parseInt(arrayIngrediente[0], 10),
+                    quantidade: parseInt(arrayIngrediente[0], 10),
                     unidade: '',
                     ingrediente: arrayIngrediente.slice(1).join(' ')
                 }
 
             } else if (indexUnidade === -1) {
                 objIngrediente = {
-                    codigo: 1,
+                    quantidade: 1,
                     unidade: '',
                     ingrediente
                 }
@@ -85,5 +86,6 @@ export default class Receita {
 
             return objIngrediente;
         });
+        this.ingredientes = novosIngredientes;
     }
 };
