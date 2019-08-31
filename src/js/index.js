@@ -90,3 +90,16 @@ const controllerReceita = async () => {
 };
 
 ['hashchange', 'load'].forEach(evento => window.addEventListener(evento, controllerReceita));
+
+
+camposDOM.receita.addEventListener('click', item => {
+    if (item.target.matches('.btn-decrease', '.btn-decrease *')) {
+        if (state.receita.porcoes > 1) {
+            state.receita.atualizaPorcoesIngredientes('-');
+        }
+    } else if (item.target.matches('.btn-increase', '.btn-increase *')) {
+        state.receita.atualizaPorcoesIngredientes('+');
+        
+    }
+    receitaView.atualizaPorcoesEIngredientesUI(state.receita);
+});

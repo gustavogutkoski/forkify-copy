@@ -87,5 +87,18 @@ export default class Receita {
             return objIngrediente;
         });
         this.ingredientes = novosIngredientes;
+    };
+
+    atualizaPorcoesIngredientes(tipoOperacao) {
+        // atualiza porções
+        const novaQuantPorcoes = tipoOperacao === '-' ? this.porcoes - 1 : this.porcoes + 1
+
+
+        // atualiza ingredientes
+        this.ingredientes.forEach(ingrediente => {
+            ingrediente.count = ingrediente.count * (novaQuantPorcoes / this.porcoes);
+        });
+
+        return novaQuantPorcoes;
     }
 };

@@ -65,12 +65,12 @@ export const renderizaReceita = receita => {
                 <span class="recipe__info-text"> servings</span>
 
                 <div class="recipe__info-buttons">
-                    <button class="btn-tiny">
+                    <button class="btn-tiny btn-decrease">
                         <svg>
                             <use href="img/icons.svg#icon-circle-with-minus"></use>
                         </svg>
                     </button>
-                    <button class="btn-tiny">
+                    <button class="btn-tiny btn-increase">
                         <svg>
                             <use href="img/icons.svg#icon-circle-with-plus"></use>
                         </svg>
@@ -117,4 +117,14 @@ export const renderizaReceita = receita => {
     `;
 
     camposDOM.receita.insertAdjacentHTML('afterbegin', carregaHTML);
+};
+
+
+export const atualizaPorcoesEIngredientesUI = receita => {
+    document.querySelector('.recipe__info-data--people').textContent = receita.porcoes;
+
+    const itemQuantidade = Array.from(document.querySelectorAll('.recipe__count'));
+    itemQuantidade.forEach((item, i) => {
+        item.textContent = formataQuantidade(receita.ingredientes[i].quantidade);
+    });
 };
