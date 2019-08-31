@@ -1,5 +1,6 @@
 import Busca from './models/Busca';
 import Receita from './models/Receita';
+import ListaCompras from './models/ListaCompras';
 import * as buscaView from './views/buscaView';
 import * as receitaView from './views/receitaView';
 import { camposDOM, criaLoader, limpaLoader } from './views/base';
@@ -96,10 +97,14 @@ camposDOM.receita.addEventListener('click', item => {
     if (item.target.matches('.btn-decrease', '.btn-decrease *')) {
         if (state.receita.porcoes > 1) {
             state.receita.atualizaPorcoesIngredientes('-');
+            receitaView.atualizaPorcoesEIngredientesUI(state.receita);
         }
     } else if (item.target.matches('.btn-increase', '.btn-increase *')) {
         state.receita.atualizaPorcoesIngredientes('+');
+        receitaView.atualizaPorcoesEIngredientesUI(state.receita);
         
     }
-    receitaView.atualizaPorcoesEIngredientesUI(state.receita);
 });
+
+
+window.lista = new ListaCompras();
