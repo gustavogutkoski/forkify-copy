@@ -3,6 +3,7 @@ import Receita from './models/Receita';
 import ListaCompras from './models/ListaCompras';
 import * as buscaView from './views/buscaView';
 import * as receitaView from './views/receitaView';
+import * as listaComprasView from './views/listaComprasView';
 import { camposDOM, criaLoader, limpaLoader } from './views/base';
 
 /* States globais do app
@@ -92,7 +93,37 @@ const controllerReceita = async () => {
 
 ['hashchange', 'load'].forEach(evento => window.addEventListener(evento, controllerReceita));
 
+const controllerListaCompras = () => {
+    // cria nova lista de compras se não existir nenhuma
+    if (!state.listaCompras) state.listaCompras = new ListaCompras();
 
+    // adiciona cada ingrediente na lista e UI
+    state.receita.ingredientes.forEach(item => {
+        const itemLista = state.lista.adicionaItem(item.quantidade, item.unidade, item.ingrediente);
+        listaComprasView.carregaItemHTML(itemLista);
+    });
+};
+
+// eventos para adicionar ou remover itens da lista de compras
+camposDOM.listaCompras.addEventListener('click', item => {
+    const id = item.target.closest('.shopping__list').dataset.itemid;
+
+    if (item.target.matches('.shopping__delete', '.shopping__delete *')) {
+        // remove do state
+        state.listaCompras.deletaItem(id);
+
+        // remove da UI
+        listaComprasView.deletaItemHTML(id);
+
+    // atualiza valores da lista de compras
+    } else if (item.target.matches('.shopping__count-value')) {
+        const valorInput = parseFloat(item.target.value, 10);
+        state.listaCompras.atualizaQuantidades(id, valorInput);
+    }
+});
+
+
+// eventos para aumentar ou diminuir porções da receita
 camposDOM.receita.addEventListener('click', item => {
     if (item.target.matches('.btn-decrease', '.btn-decrease *')) {
         if (state.receita.porcoes > 1) {
@@ -103,8 +134,8 @@ camposDOM.receita.addEventListener('click', item => {
         state.receita.atualizaPorcoesIngredientes('+');
         receitaView.atualizaPorcoesEIngredientesUI(state.receita);
         
+    } else if (item.target.matches('.recipe__btn--add', '.recipe__btn--add *')) {
+        controllerListaCompras();
     }
 });
 
-
-window.lista = new ListaCompras();

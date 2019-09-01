@@ -4,7 +4,8 @@ export const camposDOM = {
     buscaResultados: document.querySelector('.results'),
     buscaListaResultados: document.querySelector('.results__list'),
     buscaPaginasResultados: document.querySelector('.results__pages'),
-    receita: document.querySelector('.recipe')
+    receita: document.querySelector('.recipe'),
+    listaCompras: document.querySelector('.shopping__list')
 };
 
 export const camposDOMString = {
