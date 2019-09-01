@@ -39,7 +39,7 @@ const criaIngrediente = ingrediente => `
     </li>
 `;
 
-export const renderizaReceita = receita => {
+export const renderizaReceita = (receita, isFavorito) => {
     const carregaHTML = `
         <figure class="recipe__fig">
             <img src="${receita.imagem}" alt="${receita.titulo}" class="recipe__img">
@@ -80,7 +80,7 @@ export const renderizaReceita = receita => {
             </div>
             <button class="recipe__love">
                 <svg class="header__likes">
-                    <use href="img/icons.svg#icon-heart-outlined"></use>
+                    <use href="img/icons.svg#icon-heart${isFavorito ? '' : '-outlined'}"></use>
                 </svg>
             </button>
         </div>

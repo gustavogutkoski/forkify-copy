@@ -17,7 +17,7 @@ export const marcaItemSelecionado = id => {
         item.classList.remove('result__link--active');
     });
 
-    document.querySelector(`a[href="#${id}"]`).classList.add('result__link--active');
+    document.querySelector(`.results__link[href="#${id}"]`).classList.add('result__link--active');
 };
 
 /* Return the title of the recipe + '...' when the title is too long
@@ -33,7 +33,7 @@ export const marcaItemSelecionado = id => {
  * inc: 23 / inc + atual.lenght = 26 / novoTitulo = ['Pasta', 'with']
  * 
  */
-const corrigeTitulosDasReceitas = (titulo, limiteMaxCaracter = 17) => {
+export const corrigeTitulosDasReceitas = (titulo, limiteMaxCaracter = 17) => {
     const novoTitulo = [];
 
     if (titulo.length > limiteMaxCaracter) {

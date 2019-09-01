@@ -1,9 +1,11 @@
 import Busca from './models/Busca';
 import Receita from './models/Receita';
 import ListaCompras from './models/ListaCompras';
+import Favoritos from './models/Favoritos';
 import * as buscaView from './views/buscaView';
 import * as receitaView from './views/receitaView';
 import * as listaComprasView from './views/listaComprasView';
+import * as favoritosView from './views/favoritosView';
 import { camposDOM, criaLoader, limpaLoader } from './views/base';
 
 /* States globais do app
@@ -84,7 +86,9 @@ const controllerReceita = async () => {
     
             // carrega receita pra UI
             limpaLoader();
-            receitaView.renderizaReceita(state.receita);
+            receitaView.renderizaReceita(
+                state.receita, 
+                state.favoritos.isFavorito(id));
         } catch (error) {
             alert('Error processing recipe!');
         }
@@ -102,6 +106,37 @@ const controllerListaCompras = () => {
         const itemLista = state.lista.adicionaItem(item.quantidade, item.unidade, item.ingrediente);
         listaComprasView.carregaItemHTML(itemLista);
     });
+};
+
+const controllerFavoritos = () => {
+    // cria nova lista de favoritos se não existir nenhuma
+    if (!state.favoritos) state.favoritos = new Favoritos();
+
+    const id = state.receita.id;
+
+    // testa se existe na lista de favoritos
+    if (!state.favoritos.isFavorito(id)) {
+        // adiciona no state.favoritos
+        const novoFavorito = state.favoritos.adicionaFavorito(
+            id,
+            state.receita.titulo,
+            state.receita.autor,
+            state.receita.imagem
+        );
+        // altera img do botão de favorito
+            favoritosView.mudaImagemBtnFavorito(true);
+        // adiciona favorito na UI
+        favoritosView.carregaFavoritoNaLista(novoFavorito);
+
+    } else {
+        // remove do state.favoritos
+        state.favoritos.deletaFavorito(id);
+        // altera img do botão de favorito
+        favoritosView.mudaImagemBtnFavorito(false);
+        // remove favorito na UI
+        favoritosView.deletaItemLista(id);
+    }
+    favoritosView.mudaImagemMenuFavorito(state.favoritos.getTotalFavoritos());
 };
 
 // eventos para adicionar ou remover itens da lista de compras
@@ -136,6 +171,8 @@ camposDOM.receita.addEventListener('click', item => {
         
     } else if (item.target.matches('.recipe__btn--add', '.recipe__btn--add *')) {
         controllerListaCompras();
+    } else if (item.target.matches('.recipe__love, .recipe__love *')) {
+        controllerFavoritos();
     }
 });
 
