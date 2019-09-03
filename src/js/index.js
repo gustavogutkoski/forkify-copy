@@ -139,6 +139,20 @@ const controllerFavoritos = () => {
     favoritosView.mudaImagemMenuFavorito(state.favoritos.getTotalFavoritos());
 };
 
+// restaura os favoritos quando carrega pagina
+window.addEventListener('load', () => {
+    state.favoritos = new Favoritos();
+
+    // recupera favoritos
+    state.favoritos.getStorage();
+
+    // altera botão de favoritos do menu
+    favoritosView.mudaImagemMenuFavorito(state.favoritos.getTotalFavoritos());
+
+    // carrega os favoritos existentes no localStorage
+    state.favoritos.favoritos.forEach(favorito => favoritosView.carregaFavoritoNaLista(favorito));
+});
+
 // eventos para adicionar ou remover itens da lista de compras
 camposDOM.listaCompras.addEventListener('click', item => {
     const id = item.target.closest('.shopping__list').dataset.itemid;

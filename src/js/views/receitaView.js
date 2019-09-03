@@ -9,15 +9,16 @@ const formataQuantidade = quantidade => {
     if (quantidade) {
         // quantidade = 2.5 --> 2 1/2
         // quantidade = 0.5 --> 1/2
-        const [inteiro, decimal] = quantidade.toString().split('.').map(item => parseInt(item, 10));
+        const novaQuantidade = Math.round(quantidade * 10000) / 10000;
+        const [inteiro, decimal] = novaQuantidade.toString().split('.').map(item => parseInt(item, 10));
 
         if (!decimal) return inteiro;
 
         if (inteiro === 0) {
-            const fracao = new Fraction(quantidade);
+            const fracao = new Fraction(novaQuantidade);
             return `${fracao.numerator}/${fracao.denominator}`;
         } else {
-            const fracao = new Fraction(quantidade - inteiro);
+            const fracao = new Fraction(novaQuantidade - inteiro);
             return `${inteiro} ${fracao.numerator}/${fracao.denominator}`;
         }
     }
